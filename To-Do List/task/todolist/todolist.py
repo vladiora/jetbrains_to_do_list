@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 Base = declarative_base()
 
 
+# create table for db
 class Table(Base):
     __tablename__ = 'task'
     id = Column('id', Integer, primary_key=True)
@@ -31,6 +32,7 @@ Menu = "1) Today's tasks\n" \
        "0) Exit"
 
 
+# check if you have tasks today
 def todays_task():
     today = datetime.today()
     rows = session.query(Table).filter(Table.deadline == today.date()).all()
@@ -43,6 +45,7 @@ def todays_task():
         print()
 
 
+# check your tasks for this week
 def weeks_task():
     today = datetime.today()
     for i in range(7):
@@ -59,6 +62,7 @@ def weeks_task():
             print()
 
 
+# check all tasks that you have to do
 def all_task():
     rows = session.query(Table).order_by(Table.deadline).all()
     if len(rows) == 0:
@@ -71,7 +75,8 @@ def all_task():
             i += 1
         print()
 
-
+        
+# check if you missed any task
 def missed():
     rows = session.query(Table).filter(Table.deadline < datetime.today().date()).all()
     print("Missed tasks:")
@@ -84,7 +89,8 @@ def missed():
             i += 1
         print()
 
-
+        
+# add new task with deadline
 def add_task():
     task_input = input("Enter task \n")
     deadline_input = input("Enter deadline \n")
@@ -93,7 +99,8 @@ def add_task():
     session.commit()
     print("The task has been added!")
 
-
+    
+# delete tasks that you don't need anymore
 def delete():
     rows = session.query(Table).order_by(Table.deadline).all()
     print("Choose the number of the task you want to delete:")
